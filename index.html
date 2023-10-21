@@ -144,7 +144,7 @@
                 RESULT.innerHTML = JSON.parse(xhr.response).activity ?? "Connection Failed";
                 SUBMIT_BUTTON.disabled = false;
             });
-            xhr.open("GET", `http://www.boredapi.com/api/activity${getString}`);
+            xhr.open("GET", `https://www.boredapi.com/api/activity${getString}`);
             xhr.send(null);
             SUBMIT_BUTTON.disabled = true;
         });
