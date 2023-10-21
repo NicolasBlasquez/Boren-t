@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boren't</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap');
+
+        :root {
+            --primary: #1E1E28;
+            --secondary: #20202A;
+            --ternary: #2B2B35;
+            --bright: #3c3c51;
+            --font: #C9CAD0;
+            --color1: #20862d;
+            --color2:#0c5616;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--font);
+            font-family: Roboto;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            text-align: center;
+            padding-left: 1rem;
+        }
+
+        form {
+            display: flex;
+            flex-flow: column wrap;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        form .radio {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+            user-select: none;
+            gap: 1rem;
+        }
+
+        form .radio label {
+
+            display: flex;
+            padding: 1.2rem;
+            gap: 1rem;
+            flex-direction: column-reverse;
+            cursor: pointer;
+            justify-content: center;
+            border-radius: 0.5rem;
+            align-items: center;
+            border: var(--ternary) solid 1px;
+            aspect-ratio: 16/9;
+            background-color: var(--secondary);
+            background-image: radial-gradient(circle, var(--bright) 1px, rgba(0, 0, 0, 0) 1px);
+            background-size: 1rem 1rem;
+            background-position: center;
+        }
+
+        form .radio label img {
+            width: 2.6rem;
+        }
+
+        input[type=radio] {
+            display: none;
+        }
+
+        input[type=radio]:checked+label {
+            background-color: var(--ternary);
+        }
+
+        input[type=submit] {
+            background-color: var(--color1);
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            color: var(--font);
+            cursor: pointer;
+            border-radius: 0.6rem;
+            border: var(--color2) solid 1px;
+        }
+
+        input[type=submit]:disabled {
+            filter: brightness(0.8);
+        }
+
+        .result {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Boren't</h1>
+    <form action="" method="get">
+        <div class="radio">
+            <input type="radio" value="" name="type" id="random" checked><label for="random">Random<img
+                    src="Assets/Icons/random.svg" class="icon"></label>
+            <input type="radio" value="education" name="type" id="education"><label for="education">Education<img
+                    src="Assets/Icons/education.svg" class="icon"></label>
+            <input type="radio" value="recreational" name="type" id="recreational"><label
+                for="recreational">Recreational<img src="Assets/Icons/recreational.svg" class="icon"></label>
+            <input type="radio" value="social" name="type" id="social"><label for="social">Social<img
+                    src="Assets/Icons/social.svg" class="icon"></label>
+            <input type="radio" value="diy" name="type" id="diy"><label for="diy">DIY<img src="Assets/Icons/diy.svg"
+                    class="icon"></label>
+            <input type="radio" value="charity" name="type" id="charity"><label for="charity">Charity<img
+                    src="Assets/Icons/charity.svg" class="icon"></label>
+            <input type="radio" value="cooking" name="type" id="cooking"><label for="cooking">Cooking<img
+                    src="Assets/Icons/cooking.svg" class="icon"></label>
+            <input type="radio" value="relaxation" name="type" id="relaxation"><label for="relaxation">Relaxation<img
+                    src="Assets/Icons/relaxation.svg" class="icon"></label>
+            <input type="radio" value="music" name="type" id="music"><label for="music">Music<img
+                    src="Assets/Icons/music.svg" class="icon"></label>
+            <input type="radio" value="busywork" name="type" id="busywork"><label for="busywork">Busywork<img
+                    src="Assets/Icons/busywork.svg" class="icon"></label>
+        </div>
+        <input type="submit" value="Generate">
+        <h2 class="result"></h2>
+    </form>
+    <script>
+        const RADIO_INPUTS = document.querySelectorAll("input[type=radio]");
+        const SUBMIT_BUTTON = document.querySelector("input[type=submit]");
+        const RESULT = document.querySelector(".result");
+        const FORM = document.querySelector("form");
+
+        FORM.addEventListener("submit", function (e) {
+
+            e.preventDefault();
+
+            var xhr = new XMLHttpRequest();
+            var data = [`type=${getRadioInputsValue() ?? ""}`]
+            var getString = `?${data.join("&")}`;
+
+            xhr.addEventListener("load", function (e) {
+                RESULT.innerHTML = JSON.parse(xhr.response).activity ?? "Connection Failed";
+                SUBMIT_BUTTON.disabled = false;
+            });
+            xhr.open("GET", `http://www.boredapi.com/api/activity${getString}`);
+            xhr.send(null);
+            SUBMIT_BUTTON.disabled = true;
+        });
+
+        function getRadioInputsValue() {
+            let value = undefined;
+            RADIO_INPUTS.forEach(radio => {
+                if (radio.checked) { value = radio.value; }
+            });
+            return value;
+        }
+
+    </script>
+</body>
+
+</html>
